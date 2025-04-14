@@ -40,6 +40,14 @@ def make_chrome_browser(*options: str) -> webdriver.Chrome:
     CHROME_DRIVER_PATH = DRIVER_PATH / "chrome" / "chromedriver.exe"
 
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument(
+        "--disable-blink-features=AutomationControlled",
+    )
+    chrome_options.add_experimental_option(
+        "excludeSwitches",
+        ["enable-automation"],
+    )
+    chrome_options.add_experimental_option("useAutomationExtension", False)
 
     if options is not None:
         for option in options:
@@ -67,7 +75,7 @@ if __name__ == "__main__":
             (By.NAME, "q"),
         )
     )
+
     search_input.send_keys("Hello World!")
     search_input.send_keys(Keys.ENTER)
-
     sleep(TIME_TO_WAIT)
