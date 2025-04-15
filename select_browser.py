@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import re
 
 
 ROOT_FOLDER = Path(__file__).parent
@@ -76,6 +77,19 @@ if __name__ == "__main__":
         )
     )
 
-    search_input.send_keys("Hello World!")
+    search_input.send_keys("e mail rh da empresa ideal ctvm")
     search_input.send_keys(Keys.ENTER)
+
+    results = browser.find_element(
+        By.ID,
+        "m-x-content",
+    )
+
+    # result_list = set()
+    email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
+    emails = re.findall(email_pattern, results.text)
+    for email in emails:
+        print(email)
+
     sleep(TIME_TO_WAIT)
+    browser.quit()
