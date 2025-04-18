@@ -1,15 +1,8 @@
-from time import sleep
-
 from pathlib import Path
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import re
 
 
 ROOT_FOLDER = Path(__file__).parent
@@ -41,9 +34,15 @@ def make_chrome_browser(*options: str) -> webdriver.Chrome:
     CHROME_DRIVER_PATH = DRIVER_PATH / "chrome" / "chromedriver.exe"
 
     chrome_options = webdriver.ChromeOptions()
+
+    if options is not None:
+        for option in options:
+            chrome_options.add_argument(option)
+
     chrome_options.add_argument(
         "--disable-blink-features=AutomationControlled",
     )
+
     chrome_options.add_experimental_option(
         "excludeSwitches",
         ["enable-automation"],
@@ -61,35 +60,3 @@ def make_chrome_browser(*options: str) -> webdriver.Chrome:
     browser = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
     return browser
-
-
-if __name__ == "__main__":
-    TIME_TO_WAIT = 10
-
-    options = ()
-    browser = make_chrome_browser(*options)
-
-    browser.get("https://www.google.com")
-
-    search_input = WebDriverWait(browser, TIME_TO_WAIT).until(
-        EC.presence_of_element_located(
-            (By.NAME, "q"),
-        )
-    )
-
-    search_input.send_keys("e mail rh da empresa ideal ctvm")
-    search_input.send_keys(Keys.ENTER)
-
-    results = browser.find_element(
-        By.ID,
-        "m-x-content",
-    )
-
-    # result_list = set()
-    email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
-    emails = re.findall(email_pattern, results.text)
-    for email in emails:
-        print(email)
-
-    sleep(TIME_TO_WAIT)
-    browser.quit()
