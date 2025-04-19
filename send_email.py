@@ -20,15 +20,16 @@ smtp_server = os.getenv("SMTP_SERVER", "")
 smtp_port = int(os.getenv("SMTP_PORT", ""))
 
 smtp_username = os.getenv("FROM_EMAIL", "")
-smtp_password = os.getenv("EMAIL_PASSWORD", "")
+smtp_password = os.getenv("APP_PASSWORD", "")
 
-with open(FILE_PATH, "r") as file:
+with open(FILE_PATH, "r", encoding="utf-8") as file:
     text_file = file.read()
     template = Template(text_file)
     text_email = template.substitute(vaga="Estágio", plataforma="LinkedIn")
 
 
-email_subject = "Candidatura à vaga de Estágio Suporte A Aplicações - Luis Otávio Dias"
+email_subject = "Candidatura à vaga de Estágio \
+        Suporte A Aplicações - Luis Otávio Dias"
 
 mime_multipart = MIMEMultipart()
 mime_multipart["from"] = sender
@@ -44,5 +45,6 @@ with smtplib.SMTP(smtp_server, smtp_port) as server:
     server.ehlo()
     server.starttls()
     server.login(smtp_username, smtp_password)
-    server.send_message(mime_multipart)
+    # server.send_message(mime_multipart)
+    server.sendmail(sender, recipient, mime_multipart.as_string())
     print("Email enviado!")
