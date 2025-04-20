@@ -8,30 +8,53 @@ import re
 from select_browser import make_chrome_browser
 
 
-TIME_TO_WAIT = 10
+def email_remove_period(list: list):
+    email_cleaned = []
 
-options = ()
-browser = make_chrome_browser(*options)
-browser.get("https://www.google.com")
+    for i in range(len(list)):
+        dot_index = len(list[i]) - 1
+        if list[i][dot_index] == ".":
+            old_email = list[i]
+            new_email = old_email[:dot_index]
+            email_cleaned.append(new_email)
 
-search_input = WebDriverWait(browser, TIME_TO_WAIT).until(
-    EC.presence_of_element_located(
-        (By.NAME, "q"),
+    return email_cleaned
+
+
+def get_email():
+    TIME_TO_WAIT = 10
+
+    options = (
+        "--headless",
+        "--window-size=1920,1080",
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
     )
-)
-search_input.send_keys("e mail rh da empresa ideal ctvm")
-search_input.send_keys(Keys.ENTER)
+    browser = make_chrome_browser(*options)
+    browser.get("https://www.google.com")
 
-results = browser.find_element(
-    By.ID,
-    "m-x-content",
-)
+    search_input = WebDriverWait(browser, TIME_TO_WAIT).until(
+        EC.presence_of_element_located(
+            (By.NAME, "q"),
+        )
+    )
+    search_input.send_keys("e mail rh da empresa ideal ctvm")
+    search_input.send_keys(Keys.ENTER)
 
-email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
-emails = re.findall(email_pattern, results.text)
+    results = browser.find_element(
+        By.ID,
+        "m-x-content",
+    )
 
-for email in emails:
-    print(email)
-sleep(TIME_TO_WAIT)
+    email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
+    emails = re.findall(email_pattern, results.text)
 
-browser.quit()
+    email_finded = []
+
+    for email in emails:
+        email_finded.append(email)
+    sleep(TIME_TO_WAIT)
+
+    browser.quit()
+
+    email_list = email_remove_period(email_finded)
+    return email_list
