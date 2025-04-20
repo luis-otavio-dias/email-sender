@@ -1,50 +1,68 @@
 import os
-import pathlib
 import smtplib
+
 
 from string import Template
 from dotenv import load_dotenv
+from pathlib import Path
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from dataclasses import dataclass
+
 load_dotenv()
 
-FILE_PATH = pathlib.Path(__file__).parent / "utils" / "message.html"
 
-sender = os.getenv("FROM_EMAIL", "CHANGE-ME")
-recipient = sender
+@dataclass(init=False, repr=False)
+class ResumeSend:
+    """
+    Won't work unless .env file is configured.
+    Follow the .env-example to set up yours
+    """
 
+    opening: str
+    platform: str
+    subject: str
+    recipient: str | None = None
+    file: Path
 
-smtp_server = os.getenv("SMTP_SERVER", "")
-smtp_port = int(os.getenv("SMTP_PORT", ""))
+    def send_email(self):
+        file_path = self.file
 
-smtp_username = os.getenv("FROM_EMAIL", "")
-smtp_password = os.getenv("APP_PASSWORD", "")
+        sender = os.getenv("FROM_EMAIL", "CHANGE-ME")
 
-with open(FILE_PATH, "r", encoding="utf-8") as file:
-    text_file = file.read()
-    template = Template(text_file)
-    text_email = template.substitute(vaga="Estágio", plataforma="LinkedIn")
+        if self.recipient is None:
+            recipient = sender
+        else:
+            recipient = self.recipient
 
+        smtp_server = os.getenv("SMTP_SERVER", "")
+        smtp_port = int(os.getenv("SMTP_PORT", ""))
 
-email_subject = "Candidatura à vaga de Estágio \
-        Suporte A Aplicações - Luis Otávio Dias"
+        smtp_username = os.getenv("FROM_EMAIL", "")
+        smtp_password = os.getenv("APP_PASSWORD", "")
 
-mime_multipart = MIMEMultipart()
-mime_multipart["from"] = sender
-mime_multipart["to"] = recipient
-mime_multipart["subject"] = email_subject
-mime_multipart["Content-Type"] = "text/html; charset=UTF-8"
+        with open(file_path, "r", encoding="utf-8") as file:
+            text_file = file.read()
+            template = Template(text_file)
+            text_email = template.substitute(
+                opening=self.job_opening,
+                platform=self.platform,
+            )
 
-email_body = MIMEText(text_email, "html", "utf-8")
-mime_multipart.attach(email_body)
+        mime_multipart = MIMEMultipart()
+        mime_multipart["from"] = sender
+        mime_multipart["to"] = recipient
+        mime_multipart["subject"] = self.subject
+        mime_multipart["Content-Type"] = "text/html; charset=UTF-8"
 
+        email_body = MIMEText(text_email, "html", "utf-8")
+        mime_multipart.attach(email_body)
 
-with smtplib.SMTP(smtp_server, smtp_port) as server:
-    server.ehlo()
-    server.starttls()
-    server.login(smtp_username, smtp_password)
-    # server.send_message(mime_multipart)
-    server.sendmail(sender, recipient, mime_multipart.as_string())
-    print("Email enviado!")
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(smtp_username, smtp_password)
+            server.sendmail(sender, recipient, mime_multipart.as_string())
+            print("Email sent!")
