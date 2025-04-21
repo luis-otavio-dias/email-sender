@@ -35,7 +35,17 @@ def remove_period(list: list) -> list:
     return email_cleaned
 
 
-def get_email(user_search: str):
+def get_email(user_search: str) -> list:
+    """
+    Gets a list with emails (strings) by google search.
+
+    Parameters:
+        user_search (str): A text to do the search.
+
+    Returns:
+        list: String list with founded emails.
+
+    """
     TIME_TO_WAIT = 10
 
     options = (

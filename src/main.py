@@ -3,14 +3,22 @@ from send_email import ResumeSend
 
 from pathlib import Path
 
-FILE_PATH = Path(__file__).parent.parent / "utils" / "message.html"
+
+# Change according to your environment
+html_file = "message.html"
+pdf_file = "exemplo.pdf"
+
+
+TEXT_PATH = Path(__file__).parent.parent / "utils" / html_file
+FILE_PATH = Path(__file__).parent.parent / "utils" / pdf_file
 
 
 def main():
-    enterprise_name = str(input("Type the enterprise name: "))
     opening = str(input("Title of the job opening: "))
     platform = str(input("Platform that you found:  "))
     subject = str(input("Email subject: "))
+    enterprise_name = str(input("Type the enterprise name: "))
+    print("\nThis may take a while...")
 
     user_search = f"email do rh da empresa {enterprise_name}"
 
@@ -27,13 +35,17 @@ def main():
                 user_op = str(input("Y/n: "))
                 if user_op == "Y":
                     email_recipient = emails_list[i]
+                else:
+                    print("Email sent to yourself.")
+                    email_recipient = None
 
     resume_send = ResumeSend()
     resume_send.recipient = email_recipient
     resume_send.opening = opening
     resume_send.platform = platform
     resume_send.subject = subject
-    resume_send.file = FILE_PATH
+    resume_send.text_file = TEXT_PATH
+    resume_send.file_path = FILE_PATH
 
     resume_send.send_email()
 
