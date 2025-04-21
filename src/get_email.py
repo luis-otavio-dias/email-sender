@@ -21,7 +21,7 @@ def email_remove_period(list: list):
     return email_cleaned
 
 
-def get_email():
+def get_email(user_search: str):
     TIME_TO_WAIT = 10
 
     options = (
@@ -37,7 +37,7 @@ def get_email():
             (By.NAME, "q"),
         )
     )
-    search_input.send_keys("e mail rh da empresa ideal ctvm")
+    search_input.send_keys(user_search)
     search_input.send_keys(Keys.ENTER)
 
     results = browser.find_element(

@@ -17,8 +17,17 @@ load_dotenv()
 @dataclass(init=False, repr=False)
 class ResumeSend:
     """
+    Represents the necessary information to send a resume by email.
     Won't work unless .env file is configured.
     Follow the .env-example to set up yours
+
+    Attributes:
+        opening (str): Title of the job opening.
+        platform (str): Platform or website where the vacancy was found.
+        subject (str): Subject of the email to be sent.
+        recipient (str, optional): Recipient email adress. Could it be None.
+        file (Path): HTML file with email body text.
+
     """
 
     opening: str
@@ -47,7 +56,7 @@ class ResumeSend:
             text_file = file.read()
             template = Template(text_file)
             text_email = template.substitute(
-                opening=self.job_opening,
+                opening=self.opening,
                 platform=self.platform,
             )
 
