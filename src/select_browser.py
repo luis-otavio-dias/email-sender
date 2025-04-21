@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
-ROOT_FOLDER = Path(__file__).parent
+ROOT_FOLDER = Path(__file__).parent.parent
 DRIVER_PATH = ROOT_FOLDER / "drivers"
 
 LAUNCHER_PATH = Path.home() / "AppData" / "Local" / "Programs"
