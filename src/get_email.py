@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 import re
 
-from select_browser import make_chrome_browser
+from .select_browser import make_chrome_browser
 
 
 def remove_period(list: list) -> list:

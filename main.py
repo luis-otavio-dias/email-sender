@@ -1,5 +1,5 @@
-from get_email import get_email
-from send_email import ResumeSend
+from src.get_email import get_email
+from src.send_email import ResumeSend
 
 from pathlib import Path
 
@@ -9,8 +9,8 @@ html_file = "message.html"
 pdf_file = "exemplo.pdf"
 
 
-TEXT_PATH = Path(__file__).parent.parent / "utils" / html_file
-FILE_PATH = Path(__file__).parent.parent / "utils" / pdf_file
+TEXT_PATH = Path(__file__).parent / "templates" / html_file
+FILE_PATH = Path(__file__).parent / "assets" / pdf_file
 
 
 def main():
@@ -36,8 +36,15 @@ def main():
                 if user_op == "Y":
                     email_recipient = emails_list[i]
                 else:
-                    print("Email sent to yourself.")
-                    email_recipient = None
+                    continue
+
+        user_op = str(input("Send the message to one of the founded emails?[Y/n]: "))
+        if user_op == "Y":
+            user_choice = int(input("Choose by index [0, 1, ...]: "))
+            email_recipient = emails_list[user_choice]
+        else:
+            print("The email will sent to yourself.")
+            email_recipient = None
 
     resume_send = ResumeSend()
     resume_send.recipient = email_recipient
