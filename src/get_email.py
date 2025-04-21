@@ -8,7 +8,21 @@ import re
 from select_browser import make_chrome_browser
 
 
-def email_remove_period(list: list):
+def remove_period(list: list) -> list:
+    """
+    Removes the period of an email into a given list.
+
+    Parameters:
+        list (list): A list with the strings to remove the period
+
+    Returns:
+        list: List of strings without the period.
+
+    Example:
+        >>> remove_period(["example@email.com."])
+        ["example@email.com"]
+    """
+
     email_cleaned = []
 
     for i in range(len(list)):
@@ -56,5 +70,5 @@ def get_email(user_search: str):
 
     browser.quit()
 
-    email_list = email_remove_period(email_finded)
+    email_list = remove_period(email_finded)
     return email_list

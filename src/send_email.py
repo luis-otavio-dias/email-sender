@@ -36,7 +36,10 @@ class ResumeSend:
     recipient: str | None = None
     file: Path
 
-    def send_email(self):
+    def send_email(self) -> None:
+        """
+        Public method. Structures the email message and sends it.
+        """
         file_path = self.file
 
         sender = os.getenv("FROM_EMAIL", "CHANGE-ME")
