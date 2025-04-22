@@ -72,10 +72,6 @@ def get_email(user_search: str) -> list:
             )
         )
     )
-    # results = browser.find_element(
-    #     By.ID,
-    #     "m-x-content",
-    # )
 
     email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
     emails = re.findall(email_pattern, results.text)

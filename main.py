@@ -1,5 +1,5 @@
 from src.get_email import get_email, remove_period
-from src.send_email import ResumeSend
+from src.ResumeSend import ResumeSend
 
 from pathlib import Path
 
@@ -18,33 +18,7 @@ def main():
     platform = str(input("Platform that you found:  ")).strip()
     subject = str(input("Email subject: ")).strip()
     enterprise_name = str(input("Type the enterprise name: ")).strip()
-    print("\nThis may take a while...")
-
-    user_search = f"email rh empresa {enterprise_name}"
-
-    emails_list = get_email(user_search)
-
-    if not emails_list:
-        print("No emails founded")
-    else:
-        print("Founded these emails")
-        for i in range(len(emails_list)):
-            print(f"[{i}]: {emails_list[i]}")
-
-    user_op = str(input("Send message to one of the founded emails?[Y/n]: "))
-    if user_op in "Yy":
-        user_choice = int(input("Choose by index [0, 1, ...]: "))
-        email_recipient = emails_list[user_choice]
-        email_cleaned = remove_period(email_recipient)
-        print(f"Email will sent to {email_cleaned}")
-        confirm = str(input("Confirm?[Y/n]: "))
-        if confirm in "Yy":
-            email_recipient = email_cleaned
-        else:
-            pass
-    else:
-        print("The email will sent to yourself.")
-        email_recipient = None
+    email_recipient = None
 
     resume_send = ResumeSend()
     resume_send.recipient = email_recipient
@@ -54,7 +28,36 @@ def main():
     resume_send.text_file = TEXT_PATH
     resume_send.file_path = FILE_PATH
 
-    resume_send.send_email()
+    print("\nThis may take a while...")
+
+    user_search = f"email rh empresa {enterprise_name}"
+
+    emails_list = get_email(user_search)
+
+    if not emails_list:
+        print("No emails founded")
+    else:
+        print("Founded these emails: \n")
+        for i in range(len(emails_list)):
+            print(f"[{i}]: {emails_list[i]}")
+
+    user_op = str(input("\nSend message to one of the founded emails?[Y/n]: "))
+
+    if user_op not in "Yy":
+        print("Finishing operation....")
+        return
+
+    user_choice = int(input("Choose by index [0, 1, ...]: "))
+    email_cleaned = remove_period(emails_list[user_choice])
+    print(f"\nEmail will sent to {email_cleaned}")
+    confirm = str(input("Confirm?[Y/n]: "))
+
+    if confirm in "Yy":
+        email_recipient = email_cleaned
+        resume_send.send_email()
+    else:
+        print("Finishing operation...")
+        return
 
 
 main()

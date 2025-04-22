@@ -12,7 +12,9 @@ from email.mime.application import MIMEApplication
 
 from dataclasses import dataclass
 
-load_dotenv()
+ENV_PATH = Path(__file__).parent.parent / "config" / ".env"
+
+load_dotenv(ENV_PATH)
 
 
 @dataclass(init=False, repr=False)
