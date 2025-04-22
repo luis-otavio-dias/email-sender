@@ -88,4 +88,4 @@ class ResumeSend:
             server.starttls()
             server.login(smtp_username, smtp_password)
             server.sendmail(sender, recipient, mime_multipart.as_string())
-            print("Email sent!")
+            print("Sent!")

@@ -8,31 +8,31 @@ import re
 from .select_browser import make_chrome_browser
 
 
-def remove_period(list: list) -> list:
+def remove_period(string: str) -> str:
     """
-    Removes the period of an email into a given list.
+    Removes the period of a string.
 
     Parameters:
-        list (list): A list with the strings to remove the period
+        str (str): A string to remove the period.
 
     Returns:
-        list: List of strings without the period.
+        str: String without the period.
 
     Example:
-        >>> remove_period(["example@email.com."])
-        ["example@email.com"]
+        >>> remove_period("example@email.com.")
+        "example@email.com"
     """
 
-    email_cleaned = []
+    string_cleaned = ""
 
-    for i in range(len(list)):
-        dot_index = len(list[i]) - 1
-        if list[i][dot_index] == ".":
-            old_email = list[i]
-            new_email = old_email[:dot_index]
-            email_cleaned.append(new_email)
+    for i in range(len(string)):
+        dot_index = len(string[i]) - 1
+        if string[i][dot_index] == ".":
+            string_cleaned = string[:dot_index]
+        else:
+            string_cleaned = string
 
-    return email_cleaned
+    return string_cleaned
 
 
 def get_email(user_search: str) -> list:
@@ -64,10 +64,18 @@ def get_email(user_search: str) -> list:
     search_input.send_keys(user_search)
     search_input.send_keys(Keys.ENTER)
 
-    results = browser.find_element(
-        By.ID,
-        "m-x-content",
+    results = WebDriverWait(browser, TIME_TO_WAIT).until(
+        EC.presence_of_element_located(
+            (
+                By.ID,
+                "m-x-content",
+            )
+        )
     )
+    # results = browser.find_element(
+    #     By.ID,
+    #     "m-x-content",
+    # )
 
     email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
     emails = re.findall(email_pattern, results.text)
@@ -80,5 +88,4 @@ def get_email(user_search: str) -> list:
 
     browser.quit()
 
-    email_list = remove_period(email_finded)
-    return email_list
+    return email_finded
