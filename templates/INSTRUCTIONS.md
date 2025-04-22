@@ -1,9 +1,8 @@
 O código foi desenvolvido pensando em duas $-substituitions, opening e platform.
 Quaisquer outras alterações devem ser feitas diretamente no HTML
 
-Exemplo de mensegem de apresentação para o corpo do email de candidatura.
-Altere o texto entre parênteses para personalizar a mensegem.
 
+Adicione um novo texto ou utilze o exemplo abaixo, substituindo os textos entre parênteses para personalizar a mensagem.
 
 ```html
 <body>
