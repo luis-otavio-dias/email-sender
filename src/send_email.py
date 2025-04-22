@@ -22,6 +22,8 @@ class ResumeSend:
     Won't work unless .env file is configured.
     Follow the .env-example to set up yours
 
+    Attributes subject and platform will be used to $-substitutions in text_file
+
     Attributes:
         opening (str): Title of the job opening.
         platform (str): Platform or website where the vacancy was found.
