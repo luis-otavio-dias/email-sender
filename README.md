@@ -54,4 +54,22 @@ python main.py
 
 ## Estrutura do projeto
 
-
+├── .env-example
+├── .gitignore
+├── README.md
+├── assets
+    └── exemplo.pdf
+├── drivers
+    ├── chrome
+    │   └── chromedriver.exe
+    └── opera_gx
+    │   └── chromedriver.exe
+├── main.py
+├── requirements.txt
+├── src
+    ├── __init__.py
+    ├── get_email.py
+    ├── select_browser.py
+    └── send_email.py
+└── templates
+    └── message.html
