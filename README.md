@@ -14,7 +14,7 @@ Uma ferramenta de linha de comando em Python que automatiza o envio de currícul
 - Suporte a templates de e-mail em HTML e anexos em PDF  
 
 ## Pré‑requisitos  
-- Python 3.8+  
+- Python 3.10+  
 - Google Chrome instalado  
 - `chromedriver` 
 - Conexão à internet  
