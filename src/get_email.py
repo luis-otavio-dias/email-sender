@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import re
-from time import sleep
 
 from .select_browser import make_chrome_browser
 
@@ -69,8 +68,6 @@ def get_email(user_search: str) -> list:
             )
         )
     )
-
-    browser.save_screenshot("pagina_headless.png")
 
     email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
     emails = re.findall(email_pattern, results.text)
