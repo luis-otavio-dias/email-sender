@@ -2,8 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 import re
+from time import sleep
 
 from .select_browser import make_chrome_browser
 
@@ -23,14 +23,11 @@ def remove_period(string: str) -> str:
         "example@email.com"
     """
 
-    string_cleaned = ""
-
+    string_cleaned = string
+    dot_index = len(string) - 1
     for i in range(len(string)):
-        dot_index = len(string[i]) - 1
-        if string[i][dot_index] == ".":
+        if string[dot_index] == ".":
             string_cleaned = string[:dot_index]
-        else:
-            string_cleaned = string
 
     return string_cleaned
 
@@ -73,15 +70,11 @@ def get_email(user_search: str) -> list:
         )
     )
 
+    browser.save_screenshot("pagina_headless.png")
+
     email_pattern = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
     emails = re.findall(email_pattern, results.text)
 
-    email_finded = []
-
-    for email in emails:
-        email_finded.append(email)
-    sleep(TIME_TO_WAIT)
-
     browser.quit()
 
-    return email_finded
+    return emails

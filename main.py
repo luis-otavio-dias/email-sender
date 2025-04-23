@@ -36,6 +36,7 @@ def main():
 
     if not emails_list:
         print("No emails founded")
+        return
     else:
         print("Founded these emails: \n")
         for i in range(len(emails_list)):
@@ -55,9 +56,9 @@ def main():
     if confirm in "Yy":
         email_recipient = email_cleaned
         resume_send.send_email()
-    else:
-        print("Finishing operation...")
-        return
+
+    print("Finishing operation...")
+    return
 
 
 main()
