@@ -13,21 +13,7 @@ TEXT_PATH = Path(__file__).parent / "templates" / html_file
 FILE_PATH = Path(__file__).parent / "assets" / pdf_file
 
 
-def main():
-    opening = str(input("Title of the job opening: ")).strip()
-    platform = str(input("Platform that you found:  ")).strip()
-    subject = str(input("Email subject: ")).strip()
-    enterprise_name = str(input("Type the enterprise name: ")).strip()
-    email_recipient = None
-
-    resume_send = ResumeSend()
-    resume_send.recipient = email_recipient
-    resume_send.opening = opening
-    resume_send.platform = platform
-    resume_send.subject = subject
-    resume_send.text_file = TEXT_PATH
-    resume_send.file_path = FILE_PATH
-
+def search_email(enterprise_name: str):
     print("\nThis may take a while...")
 
     user_search = f"email rh empresa {enterprise_name}"
@@ -35,26 +21,66 @@ def main():
     emails_list = get_email(user_search)
 
     if not emails_list:
-        print("No emails founded")
-        return
+        emails_list.clear()
     else:
         print("Founded these emails: \n")
         for i in range(len(emails_list)):
             print(f"[{i}]: {emails_list[i]}")
 
-    user_op = str(input("\nSend message to one of the founded emails?[Y/n]: "))
+    return emails_list
 
-    if user_op not in "Yy":
-        print("Finishing operation....")
+
+def main():
+    resume_send = ResumeSend()
+    resume_send.text_file = TEXT_PATH
+    resume_send.file_path = FILE_PATH
+
+    opening = str(input("Title of the job opening: ")).strip()
+    platform = str(input("Platform that you found:  ")).strip()
+    subject = str(input("Email subject: ")).strip()
+
+    resume_send.opening = opening
+    resume_send.platform = platform
+    resume_send.subject = subject
+
+    print("Select one: ")
+    print("[0] Enter recipient manually\n[1] Search emails")
+
+    user_op = int(input("Type 0 or 1: "))
+
+    if user_op == 0:
+        email_recipient = str(input("Email recipient: ")).strip()
+        recipient = remove_period(email_recipient)
+
+    elif user_op == 1:
+        enterprise_name = str(input("Type the enterprise name: ")).strip()
+        emails_list = search_email(enterprise_name)
+
+        if not emails_list:
+            print("No emails founded")
+            return
+
+        print("Founded these emails: \n")
+        for i in range(len(emails_list)):
+            print(f"[{i}]: {emails_list[i]}")
+
+        user_op = str(input("\nSend message to one of the founded emails?[Y/n]: "))
+
+        if user_op not in "Yy":
+            print("Finishing operation....")
+            return
+
+        user_choice = int(input("Choose by index [0, 1, ...]: "))
+        recipient = remove_period(emails_list[user_choice])
+    else:
+        print("Invalid option")
         return
 
-    user_choice = int(input("Choose by index [0, 1, ...]: "))
-    email_cleaned = remove_period(emails_list[user_choice])
-    print(f"\nEmail will sent to {email_cleaned}")
+    print(f"\nEmail will be sent to {recipient}")
     confirm = str(input("Confirm?[Y/n]: "))
 
     if confirm in "Yy":
-        email_recipient = email_cleaned
+        email_recipient = recipient
         resume_send.send_email()
 
     print("Finishing operation...")
