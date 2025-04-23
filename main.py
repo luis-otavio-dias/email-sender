@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Change according to your environment
 html_file = "message.html"
-pdf_file = "exemplo.pdf"
+pdf_file = "curriculo-Luis.pdf"
 
 
 TEXT_PATH = Path(__file__).parent / "templates" / html_file
