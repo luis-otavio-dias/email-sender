@@ -1,6 +1,6 @@
 # Enviador Automático de Currículos
 
-Uma ferramenta de linha de comando em Python que automatiza o envio de currículos por e-mail, buscando o e-mail de RH da empresa via pesquisa no Google.
+Uma ferramenta de linha de comando em Python que automatiza o envio de currículos por e-mail, passando o destinatário manualmente ou buscando o e-mail de RH da empresa via pesquisa no Google.
 
 ## Funcionalidades  
 - Interação via terminal para inserir:
