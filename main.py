@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Change according to your environment
 html_file = "message.html"
-pdf_file = "curriculo-Luis.pdf"
+pdf_file = "exemplo.pdf"
 
 
 TEXT_PATH = Path(__file__).parent / "templates" / html_file
@@ -16,7 +16,7 @@ FILE_PATH = Path(__file__).parent / "assets" / pdf_file
 def search_email(enterprise_name: str):
     print("\nThis may take a while...")
 
-    user_search = f"email rh empresa {enterprise_name}"
+    user_search = f"rh email {enterprise_name}"
 
     emails_list = get_email(user_search)
 
@@ -56,14 +56,6 @@ def main():
         enterprise_name = str(input("Type the enterprise name: ")).strip()
         emails_list = search_email(enterprise_name)
 
-        if not emails_list:
-            print("No emails founded")
-            return
-
-        print("Founded these emails: \n")
-        for i in range(len(emails_list)):
-            print(f"[{i}]: {emails_list[i]}")
-
         user_op = str(input("\nSend message to one of the founded emails?[Y/n]: "))
 
         if user_op not in "Yy":
@@ -72,6 +64,7 @@ def main():
 
         user_choice = int(input("Choose by index [0, 1, ...]: "))
         recipient = remove_period(emails_list[user_choice])
+
     else:
         print("Invalid option")
         return
@@ -80,7 +73,7 @@ def main():
     confirm = str(input("Confirm?[Y/n]: "))
 
     if confirm in "Yy":
-        email_recipient = recipient
+        resume_send.recipient = recipient
         resume_send.send_email()
 
     print("Finishing operation...")
